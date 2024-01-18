@@ -21,28 +21,46 @@
 Students | <a href="/addStudent">Add Student</a>
 
 <%
-    if (students!=null && !students.isEmpty()) {%>
+    if (students != null && !students.isEmpty()) {%>
 
 <table border="1">
     <tr>
         <th>ID</th>
+        <th>Picture</th>
         <th>Name</th>
         <th>Surname</th>
         <th>Email</th>
+        <th>Age</th>
         <th>Lesson Name</th>
         <th>Delete</th>
     </tr>
     <%
-        for (Student student : students){ %>
+        for (Student student : students) { %>
     <tr>
-        <td><%=student.getId()%></td>
-        <td><%=student.getName()%></td>
-        <td><%=student.getSurname()%></td>
-        <td><%=student.getEmail()%></td>
-        <td><%=student.getLesson().getName()%></td>
+        <td><%=student.getId()%>
+        </td>
+        <td>
+            <% if (student.getPicName() != null) {%>
+            <img src="/downloadImage?imageName=<%=student.getPicName()%>" width="50">
+            <%} else {%>
+            <span>No Picture</span>
+            <%}%>
+        </td>
+        <td><%=student.getName()%>
+        </td>
+        <td><%=student.getSurname()%>
+        </td>
+        <td><%=student.getEmail()%>
+        </td>
+        <td><%=student.getAge()%>
+        </td>
+        <td><%=student.getLesson().getName()%>
+        </td>
+
         <td><a href="/deleteStudent?id=<%=student.getId()%>">delete</a></td>
     </tr>
-    <%}
+    <%
+        }
     %>
 </table>
 <%}%>

@@ -9,8 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <titl>Lessons</titl>
-    </title>
+    <title> Lessons</title>
 </head>
 <body>
 
@@ -28,6 +27,7 @@ Lessons | <a href="/addLesson">Add Lesson</a>
         <th>LecturerName</th>
         <th>Price</th>
         <th>Delete</th>
+        <th>Update</th>
     </tr>
 
     <%
@@ -46,6 +46,7 @@ Lessons | <a href="/addLesson">Add Lesson</a>
         <td><%=lesson.getPrice()%>
         </td>
         <td><a href="/deleteLesson?id=<%=lesson.getId()%>">delete</a></td>
+        <td><a href="/updateLesson?id=<%=lesson.getId()%>">update</a> </td>
     </tr>
     <%}
 

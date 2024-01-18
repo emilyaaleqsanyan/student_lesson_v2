@@ -71,7 +71,7 @@ public class LessonManager {
                         .id(resultSet.getInt("id"))
                         .name(resultSet.getString("name"))
                         .duration(resultSet.getDouble("duration"))
-                        .lecturerName(resultSet.getString("lecturerName"))
+                        .lecturerName(resultSet.getString("lecturer_Name"))
                         .price(resultSet.getDouble("price"))
                         .build();
             }
@@ -79,6 +79,20 @@ public class LessonManager {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public void update(Lesson lesson) {
+     String sql = "UPDATE lesson SET name = ?, duration = ?, lecturer_Name = ?, price = ? WHERE id = ?";
+     try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+         preparedStatement.setString(1, lesson.getName());
+         preparedStatement.setDouble(2,lesson.getDuration());
+         preparedStatement.setString(3,lesson.getLecturerName());
+         preparedStatement.setDouble(4,lesson.getPrice());
+         preparedStatement.setInt(5,lesson.getId());
+         preparedStatement.executeUpdate();
+     }catch (SQLException e){
+         throw new RuntimeException(e);
+     }
     }
 }
 

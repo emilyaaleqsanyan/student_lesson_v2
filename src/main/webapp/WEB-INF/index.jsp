@@ -3,6 +3,11 @@
 <html>
 <head>
   <title>JSP - Student-Lesson</title>
+  <style>
+    body{
+      background-image: url("../img/img.png");
+    }
+  </style>
 </head>
 <body>
 

@@ -25,6 +25,7 @@ public class StudentManager {
                         .surname(resultSet.getString("surname"))
                         .email(resultSet.getString("email"))
                         .age(resultSet.getInt("age"))
+                        .picName(resultSet.getString("pic_Name"))
                         .lesson(lessonManager.getLessonById(resultSet.getInt("lesson_id")))
                         .build());
             }
@@ -36,13 +37,14 @@ public class StudentManager {
 
 
     public void add(Student student) {
-        String sql = "INSERT INTO student(name,surname,email,age,lesson_id) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO student(name,surname,email,age,lesson_id,pic_Name) VALUES(?,?,?,?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getSurname());
             preparedStatement.setString(3, student.getEmail());
-            preparedStatement.setInt(4,student.getAge());
+            preparedStatement.setInt(4, student.getAge());
             preparedStatement.setInt(5, student.getLesson().getId());
+            preparedStatement.setString(6, student.getPicName());
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -63,5 +65,28 @@ public class StudentManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public List<Student> getByLessonId(int lessonId) {
+        String sql = "SELECT * FROM student WHERE lesson_id = " + lessonId;
+        List<Student> students = new ArrayList<>();
+        try(Statement statement = connection.createStatement()){
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                students.add(Student.builder()
+                                .id(resultSet.getInt("id"))
+                                .name(resultSet.getString("name"))
+                                .surname(resultSet.getString("surname"))
+                                .email(resultSet.getString("email"))
+                                .age(resultSet.getInt("age"))
+                                .lesson(lessonManager.getLessonById(resultSet.getInt("lesson_id")))
+                                .picName(resultSet.getString("pic_Name"))
+                        .build());
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return students;
     }
 }
