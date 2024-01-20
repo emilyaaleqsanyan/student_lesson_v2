@@ -2,16 +2,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>JSP - Student-Lesson</title>
-  <style>
-    body{
-      background-image: url("../img/img.png");
-    }
-  </style>
+  <title>Login</title>
+
 </head>
 <body>
+<% if(session.getAttribute("msg")!= null){%>
+<span style="color: red"><%=session.getAttribute("msg")%></span>
+<% session.removeAttribute("msg");%>
+<%}%>
+<form action="/login" method="post">
+  email: <input type="text" name="email"><br>
+  password: <input type="password" name="password"><br>
+  <input type="submit" value="login">
+</form>
+<br>
+<br>
 
-<a href="/lessons">View All Lessons</a> |
-<a href="/students">View All Students</a>
+<a href="/register">Register</a>
+
 </body>
 </html>

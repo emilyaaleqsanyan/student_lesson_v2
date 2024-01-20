@@ -1,29 +1,27 @@
-<%@ page import="com.example.student_lesson.model.Student" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.example.student_lesson.model.Lesson" %>
-<%@ page import="com.example.student_lesson.model.User" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.student_lesson.model.Student" %><%--
   Created by IntelliJ IDEA.
   User: Lenovo
-  Date: 12.01.2024
-  Time: 20:33
+  Date: 18.01.2024
+  Time: 12:42
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% Lesson lesson = (Lesson) request.getAttribute("lesson");%>
+<% List< Student> studentList = (List<Student>)request.getAttribute("students"); %>
 <html>
 <head>
-    <title>Students</title>
+    <title><%=lesson.getName()%>></title>
 </head>
 <body>
 
-<%
-    List<Student> students = (List<Student>) request.getAttribute("students");
-    User user = (User) session.getAttribute("user");
-%>
+<h2><%=lesson.getName()%> | <%=lesson.getId()%></h2>
+Duration: <span><%=lesson.getDuration()%></span><br>
 
-Students | <a href="/addStudent">Add Student</a>
-
+Students:
 <%
-    if (students != null && !students.isEmpty()) {%>
+    if (studentList != null && !studentList.isEmpty()) {%>
 
 <table border="1">
     <tr>
@@ -33,12 +31,10 @@ Students | <a href="/addStudent">Add Student</a>
         <th>Surname</th>
         <th>Email</th>
         <th>Age</th>
-        <th>Lesson Name</th>
-        <th>UserId</th>
-        <th>Delete</th>
+
     </tr>
-    <%
-        for (Student student : students) { %>
+        <%
+        for (Student student : studentList) { %>
     <tr>
         <td><%=student.getId()%>
         </td>
@@ -57,17 +53,14 @@ Students | <a href="/addStudent">Add Student</a>
         </td>
         <td><%=student.getAge()%>
         </td>
-        <td><%=student.getLesson().getName()%>
-        </td>
-        <td><%=user.getId()%></td>
-
-        <td><a href="/deleteStudent?id=<%=student.getId()%>">delete</a></td>
-
     </tr>
     <%
         }
     %>
 </table>
 <%}%>
+
+
+
 </body>
 </html>

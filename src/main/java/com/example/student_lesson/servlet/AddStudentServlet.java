@@ -2,8 +2,10 @@ package com.example.student_lesson.servlet;
 
 import com.example.student_lesson.manager.LessonManager;
 import com.example.student_lesson.manager.StudentManager;
+import com.example.student_lesson.manager.UserManager;
 import com.example.student_lesson.model.Lesson;
 import com.example.student_lesson.model.Student;
+import com.example.student_lesson.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -28,14 +30,15 @@ public class AddStudentServlet extends HttpServlet {
 
     private final LessonManager lessonManager = new LessonManager();
     private final StudentManager studentManager = new StudentManager();
-    private  final  String UPLOAD_DIRECTORY = "C:\\Users\\Lenovo\\ee\\student_lesson\\uploadDirectory";
+    private final String UPLOAD_DIRECTORY = "C:\\Users\\Lenovo\\ee\\student_lesson\\uploadDirectory";
 
+    private static UserManager userManager = new UserManager();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Lesson> lessons = lessonManager.getAllLessons();
         req.setAttribute("lessons", lessons);
-        req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/addStudent.jsp").forward(req, resp);
     }
 
 
@@ -49,21 +52,30 @@ public class AddStudentServlet extends HttpServlet {
 
         Part picture = req.getPart("picture");
         String pictureName = null;
-        if(picture != null && picture.getSize() > 0){
+        if (picture != null && picture.getSize() > 0) {
             pictureName = System.currentTimeMillis() + "_" + picture.getSubmittedFileName();
             picture.write(UPLOAD_DIRECTORY + File.separator + pictureName);
-
         }
-        studentManager.add(Student.builder()
-                        .name(name)
-                        .surname(surname)
-                        .email(email)
-                        .picName(pictureName)
-                        .age(age)
-                        .lesson(lessonManager.getLessonById(lessonId))
-                .build());
-        resp.sendRedirect("/students");
-
+        User user = (User) req.getSession().getAttribute("user");
+        int userId = user.getId();
+        if (studentManager.getStudentByEmail(email) == null) {
+            studentManager.add(Student.builder()
+                    .name(name)
+                    .surname(surname)
+                    .email(email)
+                    .picName(pictureName)
+                    .age(age)
+                    .lesson(lessonManager.getLessonById(lessonId))
+                    .user(userManager.getUserById(userId))
+                    .build());
+            resp.sendRedirect("/students");
+        } else {
+            req.getSession().setAttribute("msg", "a student with this email already exists");
+            resp.sendRedirect("/addStudent");
+        }
 
     }
+
 }
+
+

@@ -12,6 +12,12 @@
     <title>Add Student</title>
 </head>
 <body>
+<% if(session.getAttribute("msg")!= null){%>
+<span style="color: red"><%=session.getAttribute("msg")%></span>
+<% session.removeAttribute("msg");%>
+<%}%>
+<br>
+<br>
 
 <% List<Lesson> lessons = (List<Lesson>) request.getAttribute("lessons");%>
 

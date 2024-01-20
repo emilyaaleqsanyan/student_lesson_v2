@@ -2,6 +2,7 @@ package com.example.student_lesson.servlet;
 
 import com.example.student_lesson.manager.StudentManager;
 import com.example.student_lesson.model.Student;
+import com.example.student_lesson.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +20,9 @@ private StudentManager studentManager = new StudentManager();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> students = studentManager.getAllStudents();
+        User user = (User)req.getSession().getAttribute("user");
+        int userId = user.getId();
+        List<Student> students = studentManager.getAllStudentsByUserId(userId);
         req.setAttribute("students", students);
 
         req.getRequestDispatcher("/WEB-INF/students.jsp").forward(req,resp);

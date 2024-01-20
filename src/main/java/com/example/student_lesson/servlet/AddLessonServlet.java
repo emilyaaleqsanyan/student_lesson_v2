@@ -1,8 +1,9 @@
 package com.example.student_lesson.servlet;
 
 import com.example.student_lesson.manager.LessonManager;
+import com.example.student_lesson.manager.UserManager;
 import com.example.student_lesson.model.Lesson;
-
+import com.example.student_lesson.model.User;
 
 
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class AddLessonServlet extends HttpServlet {
 
     private LessonManager lessonManager = new LessonManager();
+    private UserManager userManager = new UserManager();
 
 
     @Override
@@ -33,14 +35,21 @@ public class AddLessonServlet extends HttpServlet {
         int lessonDuration = Integer.parseInt(req.getParameter("lessonDuration"));
         String lecturerName = req.getParameter("lecturerName");
         double price = Double.parseDouble(req.getParameter("price"));
+        User user =  (User) req.getSession().getAttribute("user");
+        int userId = user.getId();
+        if(lessonManager.getLessonByName(lessonName) == null){
         lessonManager.add(Lesson.builder()
                         .name(lessonName)
                         .duration(lessonDuration)
                         .lecturerName(lecturerName)
                         .price(price)
+                        .user(userManager.getUserById(userId))
                 .build());
-
         resp.sendRedirect("/lessons");
+        }else {
+            req.getSession().setAttribute("msg", "there is a lesson with that name");
+            resp.sendRedirect("/addLesson");
+        }
 
 
     }
